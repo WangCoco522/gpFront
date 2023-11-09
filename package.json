@@ -1,0 +1,28 @@
+{
+  "name": "gas-admin-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ant-design-vue": "^4.0.6",
+    "axios": "^1.5.0",
+    "core-js": "^3.33.1",
+    "echarts": "^5.4.3",
+    "element-plus": "^2.3.12",
+    "js-md5": "^0.7.3",
+    "v-charts": "^1.19.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.3",
+    "sass": "^1.66.1",
+    "vite": "^4.4.5"
+  }
+}
