@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { ref, reactive} from 'vue';
+import { ref, reactive } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { UserConstant } from '@/common/constant';
@@ -95,11 +95,11 @@ export default {
 
       logining.value = true;
 
-       // 验证用户名和密码是否为空
+      // 验证用户名和密码是否为空
     if (!formState.username || !formState.password) {
       alert('用户名或密码不能为空');
       logining.value = false;
-      return;
+      return; // 立即退出函数
     }
 
 
@@ -116,19 +116,20 @@ export default {
           },
         });
 
-        if (response.data.code !== 0) {
+        if (response.data.code === 0) {
+
+          localStorage.setItem(UserConstant.TOKEN, response.headers['authorization']);
+          localStorage.setItem(UserConstant.USERNAME, formState.username);
+          // TODO: Add a way to display the success message
+          router.push('/home/sensorData');
+        } else {
           if (response.data.code === 100003) {
             alert('密码错误'); // Use a more user-friendly notification system if available
           } else {
             alert(response.data.msg);
-            return;
           }
         }
 
-        localStorage.setItem(UserConstant.TOKEN, response.headers['authorization']);
-        localStorage.setItem(UserConstant.USERNAME, formState.username);
-        // TODO: Add a way to display the success message
-        router.push('/home/sensorData');
       } catch (err) {
         alert('登录请求失败，请重试'); 
       } finally {
