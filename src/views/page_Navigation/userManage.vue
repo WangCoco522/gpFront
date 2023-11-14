@@ -68,9 +68,9 @@
 </template>
 
 <script>
-import {ref, reactive, toRefs,onMounted} from 'vue';
+import {ref, onMounted} from 'vue';
 import axios from 'axios';
-import { ElMessage} from 'element-plus';
+import { ElMessageBox,ElMessage} from 'element-plus';
 import { UserConstant } from '../../common/constant';
 
 
@@ -239,11 +239,15 @@ export default {
               type: 'warning',
           })
           .then(() => {
-              axiosInstance
-              .delete(window.g.url + '/user/remove/' + id, {
-                  headers: {
-                      Authorization: localStorage.getItem(UserConstant.TOKEN),
-                  },
+            //   axiosInstance
+            //   .delete(window.g.url + '/user/remove/' + id, {
+            //       headers: {
+            //           Authorization: localStorage.getItem(UserConstant.TOKEN),
+            //       },
+            axios.delete(window.g.url + '/user/remove/' + id, {
+                    headers: {
+                        Authorization: localStorage.getItem(UserConstant.TOKEN),
+                    },
               })
               .then((resp) => {
                   if (resp.data.code !== 0) {
