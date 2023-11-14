@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-table :data="tableData" style="width: 100%" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
-            <el-table-column fixed  label="序号">
+        <el-table :data="tableData" class="userManage-custom-table" style="width: 100%" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
+            <el-table-column fixed  label="序号" width="80">
                 <template #default="scope">
                     {{ scope.$index + 1 }}
                 </template>
@@ -14,7 +14,8 @@
             <el-table-column fixed="right" label="操作" width="480">
 
             <template #default="{row}">
-                <el-button text type="primary" size="small" @click="handleModifyPassword(row.id)">修改密码</el-button>
+                <!-- <el-button text type="primary" size="small" @click="handleModifyPassword(row.id)">修改密码</el-button> -->
+                <el-button text type="success" size="small" @click="handleModifyPassword(row.id)">修改密码</el-button>
                 <el-button link type="success" size="small" @click="handleEnable(row.id)">启用</el-button>
                 <el-button link type="warning" size="small" @click="handleUnable(row.id)">禁用</el-button>
                 <el-button link type="primary" size="small" @click="handleDelete(row.id)">删除</el-button>
@@ -29,14 +30,45 @@
         <el-pagination background layout="prev, pager, next" :total="1000" />
     </div>    
 
+    
 
+    <el-dialog v-model="centerDialogVisible" title="修改密码" width="30%" center>
+        <div>
+            <el-form
+                status-icon
+                label-width="60px"
+                class="demo-ruleForm"
+            >
+
+                <el-form-item label="新&nbsp&nbsp密&nbsp&nbsp码" prop="newPassword">
+                    <!-- <el-input  v-model="modifyPasswordForm.newPassword" type="password" autocomplete="off" /> -->
+                    <!-- @input="event => (newPassword.value = event.target.value)" -->
+                    <el-input 
+                        type="password" 
+                        autocomplete="off" 
+                        v-model="newPassword"
+                    />
+                </el-form-item>
+
+            </el-form>
+        </div>
+
+        <template #footer>
+        <span class="dialog-footer-buttonContainer">
+            <el-form-item >
+                <el-button type="primary" @click="submitModifyPassword">提交</el-button>
+                <el-button @click="centerDialogVisible = false">取消修改</el-button>
+            </el-form-item>
+        </span>
+        </template>
+    </el-dialog>
 
 
     </div>
 </template>
 
 <script>
-import {ref, onMounted} from 'vue';
+import {ref, reactive, toRefs,onMounted} from 'vue';
 import axios from 'axios';
 import { ElMessage} from 'element-plus';
 import { UserConstant } from '../../common/constant';
@@ -53,21 +85,26 @@ export default {
         const pageSize = ref(10);
         const isAdmin = ref(false);
         const currentPage = ref(1);
+        const centerDialogVisible = ref(false);
         const modifyPasswordVisible = ref(false);
-        const modifyPasswordForm = ref({
-            id: 0,
-            newPassword: '',
-        });
 
-        const modifyPasswordRule = ref({
-            newPassword: [
-                {
-                    required: true,
-                    message: '请输入密码',
-                    trigger: 'blur',
-                },
-            ],
-        });
+        // const modifyPasswordForm = ref({
+        //     id: 0,
+        //     newPassword: '',
+        // });
+        const id = ref('');
+        const newPassword = ref('');
+
+
+        // const modifyPasswordRule = ref({
+        //     newPassword: [
+        //         {
+        //             required: true,
+        //             message: '请输入密码',
+        //             trigger: 'blur',
+        //         },
+        //     ],
+        // });
 
         const modifyingPassword = ref(false);
 
@@ -97,17 +134,35 @@ export default {
         }
 
 
-        const handleModifyPassword = (id) => {
-            console.log("handleModifyPassword called with id:", id);
-            modifyPasswordForm.value.id = id;
-            modifyPasswordVisible.value = true;
+        const handleModifyPassword = (selectedId) => {
+            console.log("handleModifyPassword called with id:", selectedId);
+            id.value = selectedId;
+            // modifyPasswordVisible.value = true;
+            centerDialogVisible.value = true; // 显示对话框
+        };
+
+        const submitModifyPassword = () => {
+            // modifyPassword(); // 调用修改密码的方法
+        //     modifyPasswordFormRef.value.validate((valid) => {
+        //     if (valid) {
+        //         modifyPassword(); // 调用修改密码的方法
+        //     } else {
+        //         console.log('表单验证失败');
+        //         return false;
+        //     }
+        // });
+        if (!newPassword.value) {
+            console.log('密码为空');
+            return;
+        }
+        modifyPassword(); // 调用修改密码的方法
         };
 
         const modifyPassword = () => {
             modifyingPassword.value = true;
             const form = new FormData();
-            form.append('id', String(modifyPasswordForm.value.id));
-            form.append('newPassword', modifyPasswordForm.value.newPassword);
+            form.append('id', String(id.value));
+            form.append('newPassword', newPassword.value);
             
             axiosInstance.put(window.g.url + '/user/password', form, {
                 headers: {
@@ -221,16 +276,20 @@ export default {
 
 
       return {
-          tableData,
-          formatActivate,
-          formatAdmin,
-          modifyPasswordRule,
-          handleModifyPassword,
-          modifyPassword,
-          handleEnable,
-          handleUnable,
-          handleDelete,
-          handleCurrentChange,
+        
+        tableData,
+        formatActivate,
+        formatAdmin,
+        submitModifyPassword,
+        id,
+        newPassword,
+        handleModifyPassword,
+        modifyPassword,
+        handleEnable,
+        handleUnable,
+        handleDelete,
+        handleCurrentChange,
+        centerDialogVisible
       };
     }
 }
@@ -247,6 +306,20 @@ export default {
 
 .footer-stats > span {
     margin-right: 10px;
+}
+
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}
+
+.userManage-custom-table .el-table__row{
+    height: 50px;
+}
+
+.dialog-footer-buttonContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 
 
