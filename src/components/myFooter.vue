@@ -1,6 +1,6 @@
 <template>
 
-    <div class="footer">本系统由上海然芯信息科技有限公司开发</div>
+    <div class="footer">本系统由中国科学院上海微系统与信息技术研究所开发</div>
 
 </template>
 <script>

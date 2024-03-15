@@ -1,142 +1,135 @@
 <template>
-  <div class="common-layout">
+  <el-container class="layout-container-demo" style="height: 100%">
+    <el-aside width="300px">
+        <div id="logo-system" class="logo-container">
+          <img src="@/assets/images/logo.jpg" class="logo-icon" />
+          <span>地下燃气管网监测系统</span>
+        </div>
+        <el-menu
+        active-text-color="#FFFFFF"
+        background-color="#545c64"
+        class="el-menu-vertical-demo"
+        default-active="2"
+        text-color="#fff"
+        @open="handleOpen"
+        @close="handleClose"
+      >
+
+
+        <el-menu-item index="1">
+          <el-icon><DataAnalysis /></el-icon>
+          <span class="SystemName">实时监控</span>
+        </el-menu-item>
+        <el-sub-menu index="2">
+          <template #title>
+            <el-icon><location /></el-icon>
+            <span>系统管理</span>
+          </template>
+          <el-menu-item-group title="配置管理">
+            <el-menu-item index="2-1">传感器配置</el-menu-item>
+            <el-menu-item index="2-2">通知设置</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group title="用户管理">
+            <el-menu-item index="2-3">用户权限</el-menu-item>
+            <el-menu-item index="2-4">操作日志</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
+        <el-menu-item index="3">
+          <el-icon><document /></el-icon>
+          <span>报告与分析</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <el-icon><setting /></el-icon>
+          <span>Navigator Four</span>
+        </el-menu-item>
+        </el-menu>
+    </el-aside>
+
     <el-container>
-      <el-header class="custom-header">地下燃气管网监测体系</el-header>
-      <el-container>
+      <el-header style="text-align: right; font-size: 12px">
+        <div class="toolbar">
+          <el-dropdown>
+            <el-icon style="margin-right: 8px; margin-top: 1px"
+              ><setting
+            /></el-icon>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>View</el-dropdown-item>
+                <el-dropdown-item>Add</el-dropdown-item>
+                <el-dropdown-item>Delete</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <span>Tom</span>
+        </div>
+      </el-header>
 
-        <el-aside width="200px">
-
-          <el-menu
-            class="el-menu-vertical-demo"
-            default-active="2"
-            text-color="#000"
-          >
-          
-          
-            
-           <el-menu-item index="1">
-              <router-link :to="{name:'sensorData'}" >
-              <span>多维传感器数据上报</span>
-              </router-link>
-            </el-menu-item>
-            
-
-          <el-menu-item index="4">
-          <router-link :to="{name:'setting'}" >
-            <span>设置</span>
-          </router-link>
-          </el-menu-item>
-          </el-menu>
-          
-
-        </el-aside>
-
-        <el-main class="no-padding">
-          <router-view></router-view>
-        </el-main>
-      </el-container>
+      <el-main>
+        <el-scrollbar>
+          <el-table :data="tableData">
+            <el-table-column prop="date" label="Date" width="140" />
+            <el-table-column prop="name" label="Name" width="120" />
+            <el-table-column prop="address" label="Address" />
+          </el-table>
+        </el-scrollbar>
+      </el-main>
     </el-container>
-  </div>
-    <div class="footer-container">
-        <myFooter></myFooter>
-    </div>
+  </el-container>
 </template>
 
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { Menu as IconMenu, Setting, HomeFilled,DataAnalysis } from '@element-plus/icons-vue'
 
-<style scope>
-body, html {
-    height: 100%;
-    margin: 0;
+const item = {
+  date: '2016-05-02',
+  name: 'Tom',
+  address: 'No. 189, Grove St, Los Angeles',
 }
+const tableData = ref(Array.from({ length: 20 }).fill(item))
+</script>
 
-element.style {
-    --el-menu-text-color: #000;
-    --el-menu-hover-text-color: #000;
-    --el-menu-level: 0;
+<style scoped>
+.layout-container-demo .el-header {
+  position: relative;
+  background-color: var(--el-color-primary-light-7);
+  color: var(--el-text-color-primary);
 }
-
-.common-layout {
-    height: calc(100vh - 30px);
+.layout-container-demo .el-aside {
+  color: #FFFFFF;
+  background: #304156;
 }
-
-
-.common-layout .el-container{
-        height:100%;
+.layout-container-demo .el-menu {
+  color: #FFFFFF;
+  background: #304156;
+  border-right: none;
 }
-
-.custom-header {
-  display: flex;
-  justify-content: center;
+.layout-container-demo .el-main {
+  padding: 0;
+}
+.layout-container-demo .toolbar {
+  display: inline-flex;
   align-items: center;
-  font-size: 30px; 
-  font-family: 'Arial', sans-serif; 
-}
-
-
-.el-aside{
-  background-color:#66beff;
-  display: flex;
   justify-content: center;
   height: 100%;
-  padding: 0;
-  overflow: auto;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  width: var(--el-aside-width,300px);
+  right: 20px;
 }
-
-.el-menu {
-    border-right: solid 1px var(--el-menu-border-color);
-    list-style: none;
-    position: relative;
-    margin: 0;
-    padding-left: 0;
-    background-color: inherit; 
-    box-sizing: border-box;
-}
-
-.el-aside .el-menu{
-  width: 100%;
-}
-
-.el-menu-item {
+.logo-container {
+  height: 56px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
+  padding: 10px 20px; /* 根据需要调整间距 */
+  background: #304156; /* 和侧边栏背景色一致 */
+  color: white; /* 字体颜色 */
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.el-menu-item span {
-  flex:1;
-  font-size: 18px;
-}
-
-.el-menu-item a {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  align-items: center;
-}
-
-.el-main {
-    border: 1px solid #ccc; 
-    padding: 20px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 简单的阴影效果 */
-}
-
-.footer-container {
-    height: 30px; 
-}
-
-.el-link {
+.logo-icon {
+  vertical-align: middle;
   margin-right: 8px;
+  width: 24px; /* Logo图片的宽度 */
+  height: 24px; /* Logo图片的高度 */
 }
-.el-link .el-icon--right.el-icon {
-  vertical-align: text-bottom;
-}
-
-
 
 </style>
-
-

@@ -1,14 +1,6 @@
 <template>
   <div>
   <div style="display: flex; align-items: center; justify-content: space-between; margin: 10px;">
-    <!-- 返回按钮 -->
-    <el-button 
-      type="primary" 
-      @click="goBack"
-      style="font-size: 18px; padding: 12px 24px;">
-      <i class="el-icon-arrow-left" style="margin-right: 0px;"></i>
-      返回
-    </el-button>
       
     <!-- 下拉框和提示文本 -->
     <div style="display: flex; align-items: center;">
@@ -36,13 +28,27 @@
         >{{item.label}}         
         </a-select-option>
       </a-select>
-
-
     </div>
   </div>
 
-  <div ref="echartsContainer" style="width: 1350px; height: 580px;"></div>
+  <div ref="echartsContainer" style="width: 1350px; height: calc(100vh - 210px);"></div>
 
+  <el-row class="toolbar" style="position: fixed; bottom: 20px; width: 100%;">
+      <el-col :span="6">
+        <el-button type="primary" @click="goBack">返回</el-button>
+      </el-col>
+      <el-col :span="18">
+        <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[20,40,100,200,500,1000,2000,5000,10000]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
+    </el-col>
+  </el-row>
 
  </div>
 </template>
@@ -62,7 +68,6 @@ const axiosInstance = axios.create({
   withCredentials: false,
 });
 
-
 export default {
 
   name: 'EChartsComponent', //定义Vue组件的名称为EChartsComponent
@@ -73,7 +78,7 @@ export default {
     const store = useStore(); // 为了调用 Vuex 的方法
     const currentPage = ref(1);
     const total = ref(20);
-    const pageSize = ref(10);
+    const pageSize = ref(50);
 
 
     const listLoading = ref(false);   //创建响应式引用，跟踪数据列表是否正在加载中
@@ -103,7 +108,7 @@ export default {
       {label: '系统温度',value:'systemTemperature'},
       {label: '系统湿度',value:'systemHumidity'},
       {label: '自增量',value:'id'},
-      {label: '采集时间(int8)',value:'ts_partation'},
+      // {label: '采集时间(int8)',value:'ts_partation'},
       {label: '土壤甲烷',value:'soilCh4'},
       {label: '土壤甲烷湿度',value:'soilCh4humi'},
       {label: '土壤甲烷温度',value:'soilCh4temp'},
@@ -245,7 +250,7 @@ export default {
           trigger:'axis'
         },
         xAxis: {
-          data: newSensorList.map(item => item.ts),
+          data: newSensorList.map(item => item.tsPartation),
           axisLabel: {
             rotate: 330  // 使X轴上的标签垂直显示
           }
@@ -264,12 +269,6 @@ export default {
       selectedProperties.value.pop();  // 从selectedProperties中移除最后一个元素
     }
   };
-
-
-    // const shouldDisableOption = (item) => {
-    //   if (selectedProperties.value.length < 8) return false;
-    //   return !selectedProperties.value.includes(item.labelCode);
-    // }
 
 
     onMounted(() => {
@@ -308,59 +307,11 @@ export default {
 </script>
 
 <style>
-/* .el-input.el-input--small .el-input__inner {
-    font-size: 18px;
-    height: 28px;
-    line-height: 28px;
-}
 
-.el-input.el-input--small.el-input--suffix {
-    height: 28px;
-    font-size: 18px;
-}
-
-
-.el-select-dropdown {
-    font-size: 18px;
-}
-
-canvas[data-zr-dom-id="zr_0"] {
-    transform: translateX(-4%); 
-}
-
-.el-checkbox {
-    border: none !important;
-    font-size: 18px;
-    box-shadow: none !important;
-    height: 28px;
-}
-
-.el-checkbox__input {
-    border: none !important;
-    box-shadow: none !important;
-}
-
-
-    .el-select .el-tag__close {
-        display: none;
-    }
-    .el-select .el-tag {
-        display: none !important;
-    }
-
- .hidden-check .el-checkbox__input.is-checked .el-checkbox__inner::after {
-    display: none;
+.toolbar {
+    background-color: #f9f9f9; /* 可以根据需要更改背景颜色 */
+    padding: 10px 10px;
   }
-
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after {
-    content: none;
-}
-
-.is-disabled {
-    color: #aaa; 
-    cursor: not-allowed;
-} */
-
 
 </style>
 

@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="background-image-container"></div>
     <div style="position: absolute; left:50%; top:50%;transform: translate(-50%, -50%);
-     background: #88c4ff;  width: 450px; height: 400px;
+     background: rgba(255, 255, 255, 0.4);  width: 480px; height: 450px;
      border: 3px solid #CFD3DC; border-radius: 10px;">
 
-     <h3 class="title">用户注册</h3>
+     <h2 class="title">上海市北燃气管道监控管理系统</h2>
+     <h2 class="registerPage">用户注册</h2>
 
       <a-form
     name="normal_register"
@@ -61,7 +62,6 @@
     <div>
       <myFooter></myFooter>
     </div>
-  </div>
 </template>
 
 <script>
@@ -128,33 +128,50 @@ export default {
     });
 
 
-    const doRegister = () => {
+    const doRegister = async() => {
       
       if (!username.value || !password.value || !repassword.value) {
+
+        //确保所有字段都填写
         message.warning('请填写完整注册信息！');
-        console.log("Username:", username.value);
-        console.log("Password:", password.value);
-        return false;
+        return;
       }
 
+        //确保密码匹配
        if (password.value !== repassword.value) {
-        message.error('两次输入的密码不匹配！');
-        return false;
+        message.error('两次输入的密码不一致！');
+        return;
       }
 
       const form = new FormData();
       form.append('username', username.value);
       form.append('password', password.value);
-      registering.value = true;
-
-
-      axiosInstance.post(window.g.url + '/user/register', form).then((response) => {
-        if (response.data.code === 0) {
-          message.success('注册成功，请联系管理员启用账号！');
-          login();
+    
+      try {
+          registering.value = true;
+          const response = await axiosInstance.post(window.g.url + '/user/register', form);
+          
+          if (response.data.code === 0) {
+            message.success('注册成功，请联系管理员启用您的账号！');
+            login();
+          } else {
+            // 处理其他响应
+            message.error(response.data.message || '注册失败！');
+          }
+        } catch (error) {
+          // console.error('注册失败:', error);
+          // message.error('注册请求失败！');
+          // console.error('注册失败:', error);
+          if (error.response) {
+            // 服务器响应了错误信息
+            message.error(error.response.data.message || '注册请求失败！');
+          } else {
+            // 网络或其他错误
+            message.error('注册请求失败！');
+          }
+        } finally {
+          registering.value = false;
         }
-      });
-      registering.value = false;
   };
 
     //导航到登录页面
@@ -186,15 +203,42 @@ export default {
 
 <style scoped>
   .title {
-    margin: 50px auto 40px auto;
-    text-align: center;
-    color: #505458;
-    color: #000000;
-    font-family: '微软雅黑';
-    font-size: 20px;
-  }
+  margin: 50px auto 40px auto;
+  text-align: center;
+  color: #505458;
+  color: #000000;
+  font-family: '微软雅黑';
+  font-size: 30px;
+}
+
+.registerPage {
+  /* margin: 50px auto 40px auto; */
+  text-align: center;
+  color: #505458;
+  color: #000000;
+  font-family: '微软雅黑';
+  font-size: 25px;
+}
 
   .login-form-forgot{
     margin-left:200px;
   }
+
+.background-image-container {
+  background-image: url('src/assets/images/register.jpg');
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* 设置背景图片在内容下面 */
+}
+
+.content {
+  position: relative;
+  z-index: 1; /* 确保内容显示在背景图片之上 */
+  /* 其他样式 */
+}
 </style>

@@ -2,20 +2,21 @@
   <div>
   <el-table :data="SensorMessageList" stripe style="width: 100%" @sort-change='tableSortChange'>
     <el-table-column prop="deviceIDKey" label="设备ID" width="100" align="center" sortable='custom' />
-    <el-table-column prop="ts" label="采集时间" width="150" align="center" sortable='custom' />
-    <el-table-column prop="soilPh" label="土壤PH"  width="150" align="center" sortable='custom'/>
+    <el-table-column prop="ts" label="时间戳" width="100" align="center" sortable='custom' />
+    <el-table-column prop="tsPartation" label="采集时间"  width="80" align="center" sortable='custom'/>
+    <el-table-column prop="soilPh" label="土壤PH"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="waterContent1" label="含水率1"  width="100" align="center" sortable='custom'/>
-    <el-table-column prop="temperature1" label="温度1"  width="150" align="center" sortable='custom'/>
+    <el-table-column prop="temperature1" label="温度1"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilCondictivity1" label="土壤电导率1"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="salinity1" label="Salinity1"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="tds1" label="Tds1"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="waterContent2" label="含水率2"  width="100" align="center" sortable='custom'/>
-    <el-table-column prop="temperature2" label="温度2"  width="150" align="center" sortable='custom'/>
+    <el-table-column prop="temperature2" label="温度2"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilCondictivity2" label="土壤电导率2"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="salinity2" label="Salinity2"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="tds2" label="Tds2"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="waterContent3" label="含水率3"  width="100" align="center" sortable='custom'/>
-    <el-table-column prop="temperature3" label="温度3"  width="150" align="center" sortable='custom'/>
+    <el-table-column prop="temperature3" label="温度3"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilCondictivity3" label="土壤电导率3"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="salinity3" label="Salinity3"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="tds3" label="Tds3"  width="100" align="center" sortable='custom'/>
@@ -23,7 +24,6 @@
     <el-table-column prop="systemTemperature" label="系统温度"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="systemHumidity" label="系统湿度"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="id" label="自增量"  width="100" align="center" sortable='custom'/>
-    <el-table-column prop="ts_partation" label="采集时间(int8)"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilCh4" label="土壤甲烷"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilCh4humi" label="土壤甲烷湿度"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilCh4temp" label="土壤甲烷温度"  width="100" align="center" sortable='custom'/>
@@ -34,9 +34,9 @@
     <el-table-column prop="soilWz3xdistance" label="土壤温振X位移"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilWz3ydistance" label="土壤温振Y位移"  width="100" align="center" sortable='custom'/>
     <el-table-column prop="soilWz3zdistance" label="士壤温振Z位移"  width="100" align="center" sortable='custom'/>
-    <el-table-column prop="soilWz3xacc" label="土壤温振X加速度"  width="100" align="center" sortable='custom'/>
-    <el-table-column prop="soilWz3yacc" label="土壤温振Y加速度"  width="100" align="center" sortable='custom'/>
-    <el-table-column prop="soilWz3zacc" label="土壤温振Z加速度"  width="100" align="center" sortable='custom'/>
+    <el-table-column prop="soilWz3xacc" label="土壤温振X加速度"  width="110" align="center" sortable='custom'/>
+    <el-table-column prop="soilWz3yacc" label="土壤温振Y加速度"  width="110" align="center" sortable='custom'/>
+    <el-table-column prop="soilWz3zacc" label="土壤温振Z加速度"  width="110" align="center" sortable='custom'/>
   </el-table>
     <el-row class="toolbar">
       <el-col :span="6">
@@ -78,7 +78,7 @@ export default {
     const store = useStore(); // 为了调用 Vuex 的方法
     const currentPage = ref(1);
     const total = ref(20);
-    const pageSize = ref(10);
+    const pageSize = ref(50);
     // const filters = reactive({
     //   name: '',
     // });

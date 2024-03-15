@@ -25,14 +25,14 @@
 body {
 	margin: 0px;
 	padding: 0px;
-  /* background: #1F2D3D; */
+	 /* background: #1F2D3D; */
 	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
 	font-size: 14px;
 	-webkit-font-smoothing: antialiased;
 }
 
 #app {
-	background:linear-gradient(#0082E6,#AFDDFF);
+	// background:linear-gradient(#0082E6,#AFDDFF);
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
@@ -52,14 +52,13 @@ body {
 .toolbar {
 	background: #f2f2f2;
 	padding: 10px;
-	/* border:1px solid #dfe6ec; */
+	 /* border:1px solid #dfe6ec; */
 	margin: 10px 0px;
-	
 }
 
 .toolbar .el-form-item {
-		margin-bottom: 10px;
-	}
+	margin-bottom: 10px;
+}
 
 .fade-enter-active,
 .fade-leave-active {
